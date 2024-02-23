@@ -36,7 +36,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-branch_name="main"
+branch_name="master"
 
 git push origin "$branch_name"
 
