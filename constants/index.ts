@@ -1,4 +1,4 @@
-export const navLinks:Array<navSidebar>= [
+export const navLinks= [
     {
       label: "Home",
       route: "/",

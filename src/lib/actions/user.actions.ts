@@ -5,6 +5,7 @@ import connectDB from "../database/mongoose";
 import { handleError } from "../utils";
 import { revalidatePath } from "next/cache";
 
+
 //CREATE
 export async function createUser(user:CreateUserParams){ 
     try {
