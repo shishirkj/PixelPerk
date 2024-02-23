@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 export async function createUser(user:CreateUserParams){ 
     try {
         await connectDB();
-        const newUser = await User.create(user);
+        const newUser = await User.create(user);s
         return newUser;
     } catch (error) {
         handleError(error);
