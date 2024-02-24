@@ -23,13 +23,16 @@ export async function POST(req: Request) {
   const svix_timestamp = headerPayload.get("svix-timestamp");
   const svix_signature = headerPayload.get("svix-signature");
 
+ 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
+    
     return new Response("Error occured -- no svix headers", {
       status: 400,
     });
   }
 
+  
   // Get the body
   const payload = await req.json();
   const body = JSON.stringify(payload);
@@ -59,8 +62,10 @@ export async function POST(req: Request) {
 
   // CREATE
   if (eventType === "user.created") {
+    
     console.log("data-object",evt.data)
-    const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
+    const { id, email_addresses, image_url, first_name, last_name } = evt.data;
+const username = "shishir";
 
     const user = {
       clerkId: id,
@@ -70,19 +75,26 @@ export async function POST(req: Request) {
       lastName: last_name,
       photo: image_url,
     };
+    try {
+      const newUser = await createUser(user);
 
-    const newUser = await createUser(user);
-
-    // Set public metadata
-    if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
-        publicMetadata: {
-          userId: newUser._id,
-        },
+      // Set public metadata
+      if (newUser) {
+        await clerkClient.users.updateUserMetadata(id, {
+          publicMetadata: {
+            userId: newUser._id,
+          },
+        });
+      }
+  
+      return NextResponse.json({ message: "OK", user: newUser });
+    } catch (error) {
+      console.log("error is this",error)
+      return new Response("Error occured", {
+        status: 400,
       });
     }
-
-    return NextResponse.json({ message: "OK", user: newUser });
+   
   }
 
   // UPDATE
